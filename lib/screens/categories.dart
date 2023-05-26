@@ -1,31 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:meal_app/data/dummy_data.dart';
-import 'package:meal_app/screens/meals.dart';
-import 'package:meal_app/widgets/category_grid_item.dart';
-import '../models/category.dart';
-import '../models/meal.dart';
+
+import 'package:meals/data/dummy_data.dart';
+import 'package:meals/models/meal.dart';
+import 'package:meals/widgets/category_grid_item.dart';
+import 'package:meals/screens/meals.dart';
+import 'package:meals/models/category.dart';
 
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({
     super.key,
     required this.onToggleFavorite,
+    required this.availableMeals,
   });
 
   final void Function(Meal meal) onToggleFavorite;
+  final List<Meal> availableMeals;
 
-  void _selectedCategory(BuildContext context, Category category) {
-    final filteredMeal = dummyMeals
+  void _selectCategory(BuildContext context, Category category) {
+    final filteredMeals = availableMeals
         .where((meal) => meal.categories.contains(category.id))
         .toList();
-    //Navigator.of(context).push(route) : also u can use like this
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (ctx) => MealsScreen(
-                  title: category.title,
-                  meals: filteredMeal,
-                  onToggleFavorite: onToggleFavorite,
-                )));
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => MealsScreen(
+          title: category.title,
+          meals: filteredMeals,
+          onToggleFavorite: onToggleFavorite,
+        ),
+      ),
+    ); // Navigator.push(context, route)
   }
 
   @override
@@ -39,12 +43,12 @@ class CategoriesScreen extends StatelessWidget {
         mainAxisSpacing: 20,
       ),
       children: [
-        //ikinci yol map ile: availableCategories.map((category) =>  CategoryGridItem(category: category))
+        // availableCategories.map((category) => CategoryGridItem(category: category)).toList()
         for (final category in availableCategories)
           CategoryGridItem(
             category: category,
-            onSelectedCategory: () {
-              _selectedCategory(context, category);
+            onSelectCategory: () {
+              _selectCategory(context, category);
             },
           )
       ],
