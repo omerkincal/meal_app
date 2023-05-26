@@ -5,9 +5,11 @@ class MealDetailsScreen extends StatefulWidget {
   MealDetailsScreen({
     super.key,
     required this.meal,
+    required this.onToggleFavorite,
   });
 
   final Meal meal;
+  final void Function(Meal meal) onToggleFavorite;
 
   @override
   State<MealDetailsScreen> createState() => _MealDetailsScreenState();
